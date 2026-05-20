@@ -1,0 +1,13 @@
+start-all.sh
+jps
+hdfs dfs -mkdir /input
+hdfs dfs -put input.txt /input
+(create the map reduce files)
+chmod +x map.py reduce.py
+hadoop jar /path/to/hadoop-streaming.jar \
+  -input /input/input.txt
+  -output /input/output \
+  -mapper map.py \
+  -reducer reduce.py
+hdfs dfs -cat /input/output/part-r-00000
+
