@@ -1,34 +1,35 @@
+# Load package
+library(rpart)
+
 # Load dataset
-data <- read.csv("car_data.csv")
+data <- read.csv("pokemon.csv")
 
 # Data cleanup
 data <- na.omit(data)
 data <- unique(data)
 
-# Convert gender to factor
-data$Gender <- as.factor(data$Gender)
+# Convert target column to factor
+data$Legendary <- as.factor(data$Legendary)
 
-# Build logistic regression model
-model <- glm(Purchased ~ Gender + Age + EstimatedSalary,
-             data = data,
-             family = binomial)
+# Build decision tree model
+model <- rpart(Legendary ~ HP + Attack + Defense + Speed,
+               data = data,
+               method = "class")
 
 # User input
-g <- readline("Enter Gender (Male/Female): ")
-a <- as.numeric(readline("Enter Age: "))
-s <- as.numeric(readline("Enter Salary: "))
+hp <- as.numeric(readline("Enter HP: "))
+attack <- as.numeric(readline("Enter Attack: "))
+defense <- as.numeric(readline("Enter Defense: "))
+speed <- as.numeric(readline("Enter Speed: "))
 
 input <- data.frame(
-  Gender = factor(g, levels = levels(data$Gender)),
-  Age = a,
-  EstimatedSalary = s
+  HP = hp,
+  Attack = attack,
+  Defense = defense,
+  Speed = speed
 )
 
 # Prediction
-prob <- predict(model, newdata = input, type = "response")
+result <- predict(model, newdata = input, type = "class")
 
-if(prob > 0.5){
-  print("Customer will purchase")
-} else {
-  print("Customer will not purchase")
-}
+print(result)
