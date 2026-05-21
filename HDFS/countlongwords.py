@@ -1,5 +1,4 @@
 import sys
-
 for line in sys.stdin:
     for word in line.strip().split():
         if len(word) > 5:
@@ -7,10 +6,9 @@ for line in sys.stdin:
 
 
 import sys
-
-count = 0
+counts = {}
 for line in sys.stdin:
     key, val = line.strip().split()
-    count += int(val)
-
-print("Total long words:", count)
+    counts[key] = counts.get(key, 0) + int(val)
+for key, value in counts.items():
+    print(key, value)
